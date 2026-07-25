@@ -20,3 +20,5 @@ npx vite-node <scratchpad>/check.ts   # one-off layout sanity check (outside the
 npm run build
 npm run preview -- --port 4173 & curl http://localhost:4173/ and /api/*.json   # smoke test, server killed after
 ~/.cache/ms-playwright/chromium-1228/.../chrome --headless --screenshot=<scratchpad>/shot.png http://localhost:4173/
+git add -A && git commit -m "Port the Laravel/Livewire workflow builder to React"
+npm run build   # final build after the pan/zoom clamp fix

@@ -19,6 +19,23 @@ interface PanZoomOptions {
   initX: number
 }
 
+/** Tracks the window size so the canvas can be resized and re-clamped with it. */
+function useViewportSize() {
+  const [size, setSize] = useState(() => ({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  }))
+
+  useEffect(() => {
+    const onResize = () => setSize({ width: window.innerWidth, height: window.innerHeight })
+    window.addEventListener('resize', onResize)
+
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  return size
+}
+
 function storedZoomIndex(): number {
   const stored = Number.parseFloat(localStorage.getItem(STORAGE_KEY) ?? '')
   const index = ZOOM_LEVELS.indexOf(stored)
@@ -33,36 +50,57 @@ export function usePanZoom({ maxWidth, maxHeight, initX }: PanZoomOptions) {
   const dragOrigin = useRef({ x: 0, y: 0 })
 
   const scale = ZOOM_LEVELS[zoomIndex]
-  const canvasWidth = maxWidth + window.innerWidth
-  const canvasHeight = Math.max(maxHeight + 200, window.innerHeight + 100)
+  const viewport = useViewportSize()
 
+  // The canvas must still cover the screen once it is scaled down, otherwise
+  // zooming out uncovers the page background at the edges.
+  const minScale = ZOOM_LEVELS[0]
+  const canvasWidth = Math.max(maxWidth + viewport.width, viewport.width / minScale)
+  const canvasHeight = Math.max(maxHeight + 200, viewport.height + 100, viewport.height / minScale)
+
+  /**
+   * Keeps the canvas covering the screen: it may never be pushed right/down past
+   * its own top-left corner, nor left/up past its scaled far edge.
+   */
   const clamp = useCallback(
     (next: { x: number; y: number }, atScale: number) => ({
-      x: Math.min(0, Math.max(-(canvasWidth * atScale - window.innerWidth), next.x)),
-      y: Math.min(0, Math.max(-(canvasHeight * atScale - window.innerHeight), next.y)),
+      x: Math.min(0, Math.max(-(canvasWidth * atScale - viewport.width), next.x)),
+      y: Math.min(0, Math.max(-(canvasHeight * atScale - viewport.height), next.y)),
     }),
-    [canvasWidth, canvasHeight],
+    [canvasWidth, canvasHeight, viewport],
   )
 
-  /** Centres the viewport horizontally on the trigger card. */
+  /**
+   * Centres the viewport horizontally on the trigger card — clamped, since on a
+   * wide screen at a small zoom the centred position would sit past the canvas'
+   * left edge and expose the page background.
+   */
   const centreOnTrigger = useCallback(
     (atScale: number) => {
-      const screenCentre = window.innerWidth / 2
+      const screenCentre = viewport.width / 2
       const elementCentre = (initX + NODE_SIZE / 2) * atScale
 
-      setTranslate({ x: screenCentre - elementCentre, y: 0 })
+      setTranslate(clamp({ x: screenCentre - elementCentre, y: 0 }, atScale))
     },
-    [initX],
+    [initX, clamp, viewport],
   )
 
   // Re-centre whenever the layout shifts under us (a node was added or deleted),
-  // without re-centring on every zoom step.
+  // but not on a zoom step or a resize — those keep the current position.
+  const centreRef = useRef(centreOnTrigger)
+  centreRef.current = centreOnTrigger
   const scaleRef = useRef(scale)
   scaleRef.current = scale
 
   useLayoutEffect(() => {
-    centreOnTrigger(scaleRef.current)
-  }, [centreOnTrigger])
+    centreRef.current(scaleRef.current)
+  }, [initX])
+
+  // A resize changes the canvas size, so whatever pan we were at may now leave
+  // an uncovered strip; pull it back inside.
+  useLayoutEffect(() => {
+    setTranslate((current) => clamp(current, scaleRef.current))
+  }, [clamp])
 
   const onMouseDown = useCallback(
     (event: ReactMouseEvent) => {
@@ -110,8 +148,8 @@ export function usePanZoom({ maxWidth, maxHeight, initX }: PanZoomOptions) {
       }
       const nextScale = ZOOM_LEVELS[index]
 
-      const centreX = window.innerWidth / 2
-      const centreY = window.innerHeight / 2
+      const centreX = viewport.width / 2
+      const centreY = viewport.height / 2
       const fixedX = (centreX - translate.x) / scale
       const fixedY = (centreY - translate.y) / scale
 
@@ -121,7 +159,7 @@ export function usePanZoom({ maxWidth, maxHeight, initX }: PanZoomOptions) {
         clamp({ x: centreX - fixedX * nextScale, y: centreY - fixedY * nextScale }, nextScale),
       )
     },
-    [zoomIndex, translate, scale, clamp],
+    [zoomIndex, translate, scale, clamp, viewport],
   )
 
   const resetView = useCallback(() => {
