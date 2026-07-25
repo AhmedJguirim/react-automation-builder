@@ -39,3 +39,4 @@ npm run build   # after making body text unselectable
 git add -A && git commit -m "Fit the canvas to the workflow, add /workflow/{id} and test workflows"
 git branch old-implementation master   # preserve the pre-canvas-fit version
 git checkout master && git merge canvas-fit
+npx tsc -b ; npm run build   # verify master after the merge
