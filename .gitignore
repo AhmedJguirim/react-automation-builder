@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# commands.log must stay tracked even though *.log is ignored
+!commands.log

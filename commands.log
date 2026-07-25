@@ -1,0 +1,22 @@
+# commands.log — every shell command Claude ran in this project, appended in order.
+# Exploration done before this log existed (read-only, in the Laravel root and here):
+#   ls -la react-automation-builder ; cat package.json
+#   find src public -type f ; cat vite.config.ts index.html tsconfig.app.json .gitignore ; git log --oneline
+#   cat src/main.tsx src/index.css
+#   (laravel root, read-only) cat routes/web.php, app/Helpers/*, app/Models/*, app/Services/*,
+#     resources/views/components/automations/*, resources/js/automation-builder.js,
+#     resources/css/automation-builder.css, database/migrations/*
+#   (laravel root) php artisan route:list --except-vendor
+#   (laravel root) php artisan tinker --execute '<dump automations/triggers/nodes tables as json>'
+#   (laravel root) php artisan tinker --execute '<render GET / to check status code>'
+
+cd react-automation-builder && cat >> commands.log <<EOF ...   # created this file
+printf '...!commands.log' >> .gitignore          # keep the log out of the *.log ignore rule
+mkdir -p public/api/automations src/lib src/hooks src/components/cards
+rm -f src/App.css src/assets/*        # unused vite starter demo assets
+npx tsc -b
+npx tsc -b ; npx oxlint
+npx vite-node <scratchpad>/check.ts   # one-off layout sanity check (outside the repo)
+npm run build
+npm run preview -- --port 4173 & curl http://localhost:4173/ and /api/*.json   # smoke test, server killed after
+~/.cache/ms-playwright/chromium-1228/.../chrome --headless --screenshot=<scratchpad>/shot.png http://localhost:4173/

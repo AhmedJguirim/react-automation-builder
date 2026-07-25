@@ -1,0 +1,85 @@
+{
+  "automation": {
+    "id": 1,
+    "uuid": "58841864-b44d-4781-aa30-801b8dc0b99d",
+    "name": "Test Workflow",
+    "is_active": true,
+    "is_draft": false,
+    "version": 1,
+    "is_valid": true
+  },
+  "trigger": {
+    "id": "019f74d8-4449-726b-a48b-d80aba7eabd6",
+    "automation_id": 1,
+    "condition_type": "manual",
+    "trigger_type": "manual",
+    "condition": []
+  },
+  "nodes": [
+    {
+      "id": "019f74d8-4451-732e-82cb-ba8155f1515e",
+      "title": "Send an email",
+      "relationship_type": "child",
+      "level": 1,
+      "type": "action",
+      "full": false,
+      "specific_type": "send-mail",
+      "params": {},
+      "automation_id": 1,
+      "is_valid": true,
+      "parent_id": null
+    },
+    {
+      "id": "019f74d8-4451-732e-82cb-ba8155f1516a",
+      "title": "if/else conditions",
+      "relationship_type": "child",
+      "level": 2,
+      "type": "fork",
+      "full": false,
+      "specific_type": "if-else",
+      "params": {},
+      "automation_id": 1,
+      "is_valid": true,
+      "parent_id": "019f74d8-4451-732e-82cb-ba8155f1515e"
+    },
+    {
+      "id": "019f74d8-4451-732e-82cb-ba8155f1517b",
+      "title": "Add tag",
+      "relationship_type": "left-child",
+      "level": 3,
+      "type": "action",
+      "full": false,
+      "specific_type": "add-tag",
+      "params": {},
+      "automation_id": 1,
+      "is_valid": true,
+      "parent_id": "019f74d8-4451-732e-82cb-ba8155f1516a"
+    },
+    {
+      "id": "019f74d8-4451-732e-82cb-ba8155f1518c",
+      "title": "Split contacts randomly by a pourcentage",
+      "relationship_type": "right-child",
+      "level": 3,
+      "type": "fork",
+      "full": false,
+      "specific_type": "a-b-testing",
+      "params": {},
+      "automation_id": 1,
+      "is_valid": true,
+      "parent_id": "019f74d8-4451-732e-82cb-ba8155f1516a"
+    },
+    {
+      "id": "019f74d8-4451-732e-82cb-ba8155f1519d",
+      "title": "Send a WhatsApp message",
+      "relationship_type": "left-child",
+      "level": 4,
+      "type": "action",
+      "full": false,
+      "specific_type": "send-whatsapp",
+      "params": { "delay_value": 2, "delay_unit": "days" },
+      "automation_id": 1,
+      "is_valid": true,
+      "parent_id": "019f74d8-4451-732e-82cb-ba8155f1518c"
+    }
+  ]
+}

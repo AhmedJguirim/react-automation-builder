@@ -1,0 +1,82 @@
+[
+  {
+    "specific_type": "send-mail",
+    "card_type": "action",
+    "label": "Send an email",
+    "description": "Send a templated email to the contact.",
+    "icon": "envelope",
+    "group": "Actions"
+  },
+  {
+    "specific_type": "send-whatsapp",
+    "card_type": "action",
+    "label": "Send a WhatsApp message",
+    "description": "Reach the contact on WhatsApp.",
+    "icon": "chat-bubble",
+    "group": "Actions"
+  },
+  {
+    "specific_type": "add-tag",
+    "card_type": "action",
+    "label": "Add tag",
+    "description": "Attach a tag to the contact.",
+    "icon": "tag",
+    "group": "Actions"
+  },
+  {
+    "specific_type": "remove-tag",
+    "card_type": "action",
+    "label": "Remove tag",
+    "description": "Detach a tag from the contact.",
+    "icon": "tag",
+    "group": "Actions"
+  },
+  {
+    "specific_type": "unsubscribe-contact",
+    "card_type": "action",
+    "label": "Remove contact from the platform",
+    "description": "Unsubscribe and stop all messaging.",
+    "icon": "user-minus",
+    "group": "Actions"
+  },
+  {
+    "specific_type": "update-contact",
+    "card_type": "action",
+    "label": "Update contact information",
+    "description": "Write fields onto the contact record.",
+    "icon": "pencil-square",
+    "group": "Actions"
+  },
+  {
+    "specific_type": "import-csv",
+    "card_type": "action",
+    "label": "Import a CSV file",
+    "description": "Ingest rows from an uploaded CSV.",
+    "icon": "arrow-up-tray",
+    "group": "Actions"
+  },
+  {
+    "specific_type": "if-else",
+    "card_type": "fork",
+    "label": "if/else conditions",
+    "description": "Split the branch on a condition.",
+    "icon": "arrows-right-left",
+    "group": "Conditions"
+  },
+  {
+    "specific_type": "a-b-testing",
+    "card_type": "fork",
+    "label": "Split contacts randomly by a pourcentage",
+    "description": "Randomly split traffic between two branches.",
+    "icon": "percent-badge",
+    "group": "Conditions"
+  },
+  {
+    "specific_type": "e-commerce",
+    "card_type": "fork",
+    "label": "Wait for an e-commerce event",
+    "description": "Branch on whether an order happens.",
+    "icon": "shopping-cart",
+    "group": "Conditions"
+  }
+]
