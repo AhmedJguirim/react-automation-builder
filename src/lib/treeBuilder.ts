@@ -52,6 +52,16 @@ const COLORS: Record<ConnectionType, string> = {
   right: '#b01a1a',
 }
 
+/** Rendered width of an element, by type. */
+export function widthOf(element: { type: string }): number {
+  return element.type === 'exit' ? EXIT_SIZE : NODE_SIZE
+}
+
+/** Rendered height of an element, by type. */
+export function heightOf(element: { type: string }): number {
+  return element.type === 'exit' ? EXIT_HEIGHT : NODE_HEIGHT
+}
+
 /** The DOM id an element is rendered with, e.g. `action-<uuid>`. */
 export function elementId(node: { type: string; id: string }): string {
   return `${node.type}-${node.id}`
@@ -83,8 +93,10 @@ export class AutomationTreeBuilder {
 
   private maxWidth = 0
 
-  /** Rightmost x reached by any element, used to size the canvas. */
-  private mx = 0
+  /** Bounding box of the laid-out elements, filled in by normalise(). */
+  private contentWidth = 0
+
+  private contentHeight = 0
 
   private readonly triggerRow: WorkflowTrigger
 
@@ -103,14 +115,16 @@ export class AutomationTreeBuilder {
     builder.calculateXY(builder.tree[0], 0)
     builder.adjustSpacing()
     builder.flattenTree(builder.tree)
-    builder.centerXY()
+    builder.normalise()
+
+    const root = builder.elements.find((element) => element.type === 'trigger')
 
     return {
       elements: builder.elements,
       connections: builder.connections,
-      maxWidth: builder.mx,
-      maxHeight: (Object.keys(builder.nodesByLevel).length + 1) * LEVEL_HEIGHT,
-      initX: builder.elements[0]?.x ?? 0,
+      contentWidth: builder.contentWidth,
+      contentHeight: builder.contentHeight,
+      triggerCentreX: root ? root.x + NODE_SIZE / 2 : builder.contentWidth / 2,
     }
   }
 
@@ -496,33 +510,28 @@ export class AutomationTreeBuilder {
   }
 
   /**
-   * Shifts every element so the tree sits centred with no negative coordinates,
-   * tracking the rightmost edge reached (needed to size the scrollable canvas).
+   * Moves the laid-out tree into its own coordinate space: the bounding box of
+   * every card starts at (0, 0), and its size is reported as contentWidth /
+   * contentHeight. Where that box then sits on the canvas is a view concern, so
+   * nothing here pads or centres it.
    */
-  centerXY(): void {
+  normalise(): void {
     if (this.elements.length === 0) {
       return
     }
 
-    let negativeOffset = 0
+    const left = Math.min(...this.elements.map((element) => element.x))
+    const top = Math.min(...this.elements.map((element) => element.y))
+    const right = Math.max(...this.elements.map((element) => element.x + widthOf(element)))
+    const bottom = Math.max(...this.elements.map((element) => element.y + heightOf(element)))
+
     for (const element of this.elements) {
-      element.x = element.x + this.maxWidth / 2 + 500
-      if (element.x < negativeOffset) {
-        negativeOffset = element.x
-      }
-      if (element.x > this.maxWidth) {
-        this.mx = element.x
-      }
+      element.x -= left
+      element.y -= top
     }
 
-    if (negativeOffset) {
-      for (const element of this.elements) {
-        element.x += -negativeOffset + 50
-        if (element.x > this.maxWidth) {
-          this.mx = element.x
-        }
-      }
-    }
+    this.contentWidth = right - left
+    this.contentHeight = bottom - top
   }
 
   /** Depth-first search within the nested tree. */

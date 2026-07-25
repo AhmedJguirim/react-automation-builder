@@ -48,6 +48,14 @@ export interface Automation {
   is_valid: boolean
 }
 
+/** An entry of `/api/workflows.json`, listed on the landing page. */
+export interface WorkflowSummary {
+  id: number
+  name: string
+  description: string
+  size: string
+}
+
 /** What `/api/automations/{id}.json` returns — the equivalent of `Automation::with('trigger')`. */
 export interface AutomationPayload {
   automation: Automation
@@ -89,15 +97,22 @@ export interface Connection {
   type: ConnectionType
 }
 
-/** The full result of a layout pass. */
+/**
+ * The full result of a layout pass. Coordinates are content-relative: the
+ * bounding box of the cards starts at (0, 0) and is contentWidth x contentHeight,
+ * leaving the canvas free to place and pad it however it likes.
+ */
 export interface Layout {
   elements: PositionedElement[]
   connections: Connection[]
-  /** Rightmost x reached by any element (the helper's `mx`). */
-  maxWidth: number
-  maxHeight: number
-  /** x of the first element, used to centre the viewport on the trigger. */
-  initX: number
+  contentWidth: number
+  contentHeight: number
+  /**
+   * x of the middle of the trigger card. The tree is rarely symmetrical around
+   * it, so this — not the middle of the bounding box — is what the view centres
+   * on: the workflow reads from its root outwards.
+   */
+  triggerCentreX: number
 }
 
 /** An entry of `/api/node-types.json` — the card picker catalogue. */

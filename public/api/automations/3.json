@@ -1,0 +1,104 @@
+{
+  "automation": {
+    "id": 3,
+    "uuid": "00000000-0000-4000-8000-000000000003",
+    "name": "Onboarding drip",
+    "is_active": true,
+    "is_draft": false,
+    "version": 1,
+    "is_valid": true
+  },
+  "trigger": {
+    "id": "trigger-3",
+    "automation_id": 3,
+    "condition_type": "manual",
+    "trigger_type": "manual",
+    "condition": []
+  },
+  "nodes": [
+    {
+      "id": "c1",
+      "title": "Send an email",
+      "relationship_type": "child",
+      "level": 1,
+      "type": "action",
+      "full": false,
+      "specific_type": "send-mail",
+      "params": {},
+      "automation_id": 3,
+      "is_valid": true,
+      "parent_id": null
+    },
+    {
+      "id": "c2",
+      "title": "Add tag",
+      "relationship_type": "child",
+      "level": 2,
+      "type": "action",
+      "full": false,
+      "specific_type": "add-tag",
+      "params": {},
+      "automation_id": 3,
+      "is_valid": true,
+      "parent_id": "c1"
+    },
+    {
+      "id": "c3",
+      "title": "Send a WhatsApp message",
+      "relationship_type": "child",
+      "level": 3,
+      "type": "action",
+      "full": false,
+      "specific_type": "send-whatsapp",
+      "params": {
+        "delay_value": 3,
+        "delay_unit": "days"
+      },
+      "automation_id": 3,
+      "is_valid": true,
+      "parent_id": "c2"
+    },
+    {
+      "id": "c4",
+      "title": "Update contact information",
+      "relationship_type": "child",
+      "level": 4,
+      "type": "action",
+      "full": false,
+      "specific_type": "update-contact",
+      "params": {},
+      "automation_id": 3,
+      "is_valid": true,
+      "parent_id": "c3"
+    },
+    {
+      "id": "c5",
+      "title": "Send an email",
+      "relationship_type": "child",
+      "level": 5,
+      "type": "action",
+      "full": false,
+      "specific_type": "send-mail",
+      "params": {
+        "delay_value": 1,
+        "delay_unit": "week"
+      },
+      "automation_id": 3,
+      "is_valid": true,
+      "parent_id": "c4"
+    },
+    {
+      "id": "c6",
+      "title": "Remove tag",
+      "relationship_type": "child",
+      "level": 6,
+      "type": "action",
+      "full": false,
+      "specific_type": "remove-tag",
+      "params": {},
+      "automation_id": 3,
+      "is_valid": true,
+      "parent_id": "c5"
+    }
+  ]
+}

@@ -22,3 +22,20 @@ npm run preview -- --port 4173 & curl http://localhost:4173/ and /api/*.json   #
 ~/.cache/ms-playwright/chromium-1228/.../chrome --headless --screenshot=<scratchpad>/shot.png http://localhost:4173/
 git add -A && git commit -m "Port the Laravel/Livewire workflow builder to React"
 npm run build   # final build after the pan/zoom clamp fix
+git commit -m "Clamp the initial pan so zooming out cannot expose the page background"
+git checkout -b canvas-fit
+node <scratchpad>/gen.mjs   # generated public/api/automations/{2,3,4,5}.json test workflows
+sed -i "s#import { Link } from '../lib/router'#import { Link } from '../components/Link'#" src/pages/*.tsx src/App.tsx
+npx tsc -b ; npx oxlint
+npm run build ; npm run preview -- --port 4176 & ; headless screenshots of /workflow/1..5 and /
+pkill -f "[v]ite preview" ; npm run build ; npm run preview --port 4178 & ; screenshots of /workflow/1..5 and /
+sed -i 's#arrows-right-left#arrow-left#' src/pages/WorkflowBuilder.tsx (back-link icon)
+npx tsc -b ; npx oxlint ; npm run build ; screenshots of /workflow/2 and /workflow/3
+node <scratchpad>/gen4.mjs   # regenerated workflow 4 with 12 nested conditions
+npm run build ; preview :4180 ; screenshots of /workflow/4 at 1600x900 and 4400x1500
+npx tsc -b ; npm run build
+npx tsc -b ; npx oxlint ; npm run build ; screenshots verifying trigger centring on /workflow/{1,4,5}
+npm run build   # after making body text unselectable
+git add -A && git commit -m "Fit the canvas to the workflow, add /workflow/{id} and test workflows"
+git branch old-implementation master   # preserve the pre-canvas-fit version
+git checkout master && git merge canvas-fit

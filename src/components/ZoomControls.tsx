@@ -29,7 +29,7 @@ export function ZoomControls({
       >
         <Icon name="minus" className="h-4 w-4" />
       </button>
-      <span className="w-12 text-center text-xs font-medium tabular-nums select-none">
+      <span className="w-12 text-center text-xs font-medium tabular-nums">
         {Math.round(scale * 100)}%
       </span>
       <button

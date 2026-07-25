@@ -4,7 +4,7 @@
  * with fetch, so the component reads its data over the network exactly as it
  * would against a real backend.
  */
-import type { AutomationPayload, NodeTypeOption } from '../types'
+import type { AutomationPayload, NodeTypeOption, WorkflowSummary } from '../types'
 
 async function getJson<T>(url: string): Promise<T> {
   const response = await fetch(url)
@@ -17,6 +17,10 @@ async function getJson<T>(url: string): Promise<T> {
 
 export function fetchAutomation(id: number): Promise<AutomationPayload> {
   return getJson<AutomationPayload>(`/api/automations/${id}.json`)
+}
+
+export function fetchWorkflows(): Promise<WorkflowSummary[]> {
+  return getJson<WorkflowSummary[]>('/api/workflows.json')
 }
 
 export function fetchNodeTypes(): Promise<NodeTypeOption[]> {

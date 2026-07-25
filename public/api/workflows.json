@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Test Workflow",
+    "description": "The original record: one action, an if/else and a random split.",
+    "size": "Medium — 5 nodes, 3 levels of branching"
+  },
+  {
+    "id": 2,
+    "name": "Nothing yet",
+    "description": "A trigger on its own, so the canvas has almost nothing to hold.",
+    "size": "Tiny — 0 nodes"
+  },
+  {
+    "id": 3,
+    "name": "Onboarding drip",
+    "description": "A straight chain with no branches at all.",
+    "size": "Tall and narrow — 6 nodes, 1 column"
+  },
+  {
+    "id": 4,
+    "name": "Segmentation, everywhere",
+    "description": "12 nested conditions with branches of unequal depth — the limit test.",
+    "size": "Huge — 23 nodes, 37 cards, 6594 x 1610 px"
+  },
+  {
+    "id": 5,
+    "name": "Empty split",
+    "description": "One condition with both branches still open.",
+    "size": "Small and wide — 1 node"
+  }
+]

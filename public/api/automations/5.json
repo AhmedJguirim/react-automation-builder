@@ -1,0 +1,33 @@
+{
+  "automation": {
+    "id": 5,
+    "uuid": "00000000-0000-4000-8000-000000000005",
+    "name": "Empty split",
+    "is_active": true,
+    "is_draft": false,
+    "version": 1,
+    "is_valid": true
+  },
+  "trigger": {
+    "id": "trigger-5",
+    "automation_id": 5,
+    "condition_type": "manual",
+    "trigger_type": "manual",
+    "condition": []
+  },
+  "nodes": [
+    {
+      "id": "s1",
+      "title": "if/else conditions",
+      "relationship_type": "child",
+      "level": 1,
+      "type": "fork",
+      "full": false,
+      "specific_type": "if-else",
+      "params": {},
+      "automation_id": 5,
+      "is_valid": true,
+      "parent_id": null
+    }
+  ]
+}

@@ -11,6 +11,16 @@ body,
 body {
   font-family: 'Instrument Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+
+  /* Nothing here is meant to be copied, and dragging the canvas otherwise ends
+     up highlighting card labels. Inputs opt back in below. */
+  user-select: none;
+}
+
+input,
+textarea,
+[contenteditable] {
+  user-select: text;
 }
 
 .canvas-grid {
@@ -19,10 +29,9 @@ body {
   background-size: 24px 24px;
 }
 
-/* Cards sit above the connector layer, and never get selected while panning. */
+/* Cards sit above the connector layer. */
 .tree-element {
   z-index: 2;
-  user-select: none;
 }
 
 .add-connection-button {

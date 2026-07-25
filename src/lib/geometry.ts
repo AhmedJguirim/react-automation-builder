@@ -7,7 +7,7 @@
  * link enters its target at the top centre.
  */
 import type { Connection, PositionedElement } from '../types'
-import { EXIT_HEIGHT, EXIT_SIZE, NODE_HEIGHT, NODE_SIZE } from './treeBuilder'
+import { heightOf, widthOf } from './treeBuilder'
 
 export interface Point {
   x: number
@@ -21,23 +21,16 @@ export interface ConnectorPath {
   midpoint: Point
 }
 
-function sizeOf(element: PositionedElement): { width: number; height: number } {
-  return element.type === 'exit'
-    ? { width: EXIT_SIZE, height: EXIT_HEIGHT }
-    : { width: NODE_SIZE, height: NODE_HEIGHT }
-}
-
 /** Where a link leaves its source card, per connection type. */
 function sourceAnchor(element: PositionedElement, type: Connection['type']): Point {
-  const { width, height } = sizeOf(element)
   const ratio = type === 'left' ? 0.2 : type === 'right' ? 0.8 : 0.5
 
-  return { x: element.x + width * ratio, y: element.y + height }
+  return { x: element.x + widthOf(element) * ratio, y: element.y + heightOf(element) }
 }
 
 /** Where a link enters its target card: always the top centre. */
 function targetAnchor(element: PositionedElement): Point {
-  return { x: element.x + sizeOf(element).width / 2, y: element.y }
+  return { x: element.x + widthOf(element) / 2, y: element.y }
 }
 
 /** Point at t = 0.5 on a cubic Bézier. */

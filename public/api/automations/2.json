@@ -1,0 +1,19 @@
+{
+  "automation": {
+    "id": 2,
+    "uuid": "00000000-0000-4000-8000-000000000002",
+    "name": "Nothing yet",
+    "is_active": true,
+    "is_draft": false,
+    "version": 1,
+    "is_valid": true
+  },
+  "trigger": {
+    "id": "trigger-2",
+    "automation_id": 2,
+    "condition_type": "manual",
+    "trigger_type": "manual",
+    "condition": []
+  },
+  "nodes": []
+}

@@ -23,6 +23,7 @@ const PATHS: Record<string, string[]> = {
   'arrows-pointing-out': ['M9 4H4v5', 'M15 4h5v5', 'M15 20h5v-5', 'M9 20H4v-5'],
   exit: ['M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4', 'm14 8 4 4-4 4', 'M18 12H9'],
   'x-mark': ['m6 6 12 12', 'M18 6 6 18'],
+  'arrow-left': ['M20 12H4', 'm9 7-5 5 5 5'],
 }
 
 interface IconProps extends SVGProps<SVGSVGElement> {
